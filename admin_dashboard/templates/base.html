@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>{% block title %}GenTube Admin Dashboard{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo1.png') }}">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2A4D8E",
+                        "danger": "#DC3545",
+                        "success": "#28A745",
+                        "info": "#17A2B8",
+                        "background-light": "#F8F9FA",
+                        "background-dark": "#101922",
+                        "text-light": "#343A40",
+                        "text-dark": "#E1E8F0",
+                        "border-light": "#DEE2E6",
+                        "border-dark": "#2A3B4C",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#182431"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+    <div class="relative flex min-h-screen w-full flex-col">
+        <!-- Top Navigation Bar -->
+        <header class="sticky top-0 z-50 flex items-center justify-center border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark/80 backdrop-blur-sm">
+            <div class="flex w-full max-w-[1200px] items-center justify-between px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <div class="size-8">
+                        <img src="{{ url_for('static', filename='logo2.png') }}" alt="GenTube Logo" class="h-8 w-8 block dark:hidden">
+                        <img src="{{ url_for('static', filename='logo1.png') }}" alt="GenTube Logo" class="h-8 w-8 hidden dark:block">
+                    </div>
+                    <h2 class="text-lg font-bold tracking-tight">GenTube Admin</h2>
+                </div>
+                <div class="flex items-center gap-6">
+                    <nav class="flex items-center gap-6 text-sm font-medium">
+                        {% if is_authenticated %}
+                            <a class="{% if request.endpoint == 'dashboard' %}relative text-primary py-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary{% else %}py-1 text-text-light/80 dark:text-text-dark/80 hover:text-primary dark:hover:text-primary transition-colors{% endif %}" href="{{ url_for('dashboard') }}">Dashboard</a>
+                            <a class="{% if request.endpoint == 'add_video' %}relative text-primary py-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary{% else %}py-1 text-text-light/80 dark:text-text-dark/80 hover:text-primary dark:hover:text-primary transition-colors{% endif %}" href="{{ url_for('add_video') }}">Add Video</a>
+                            <a class="py-1 text-text-light/80 dark:text-text-dark/80 hover:text-primary dark:hover:text-primary transition-colors" href="{{ url_for('export_data') }}">Export Data</a>
+                        {% endif %}
+                    </nav>
+                    {% if is_authenticated %}
+                        <a href="{{ url_for('logout') }}" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-danger text-white text-sm font-bold transition-opacity hover:opacity-90">
+                            <span class="truncate">Logout</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content Area -->
+        <main class="flex flex-1 justify-center py-8">
+            <div class="flex w-full max-w-[1200px] flex-col gap-6 px-6">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flex flex-col gap-4">
+                            {% for category, message in messages %}
+                                {% if category == 'error' %}
+                                    <div class="flex items-center gap-4 rounded-lg border border-danger/30 bg-danger/10 p-4 text-danger dark:bg-danger/20 dark:border-danger/40">
+                                        <div class="flex shrink-0 items-center justify-center rounded-full bg-danger/20 size-8">
+                                            <span class="material-symbols-outlined !text-xl">cancel</span>
+                                        </div>
+                                        <p class="text-sm font-medium flex-1">{{ message }}</p>
+                                        <button class="shrink-0 flex size-7 items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors" onclick="this.parentElement.remove()">
+                                            <span class="material-symbols-outlined !text-lg">close</span>
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <div class="flex items-center gap-4 rounded-lg border border-success/30 bg-success/10 p-4 text-success dark:bg-success/20 dark:border-success/40">
+                                        <div class="flex shrink-0 items-center justify-center rounded-full bg-success/20 size-8">
+                                            <span class="material-symbols-outlined !text-xl">check_circle</span>
+                                        </div>
+                                        <p class="text-sm font-medium flex-1">{{ message }}</p>
+                                        <button class="shrink-0 flex size-7 items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors" onclick="this.parentElement.remove()">
+                                            <span class="material-symbols-outlined !text-lg">close</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Page Content -->
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

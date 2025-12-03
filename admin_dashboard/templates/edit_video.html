@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Video - GenTube Admin{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-2xl">
+    <h1 class="text-2xl font-bold tracking-tight text-text-light dark:text-text-dark">Edit Video</h1>
+    
+    <div class="mt-8 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-6 sm:p-8 shadow-sm">
+        <form method="POST" class="space-y-6">
+            {{ form.hidden_tag() }}
+            
+            <div>
+                {{ form.title.label(class="block text-sm font-medium leading-6 text-text-light dark:text-text-dark") }}
+                <div class="mt-2">
+                    {{ form.title(class="block w-full rounded-md border-0 py-1.5 text-text-light dark:text-text-dark bg-surface-light dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6") }}
+                    {% if form.title.errors %}
+                        <p class="mt-1 text-sm text-danger">{{ form.title.errors[0] }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div>
+                {{ form.url.label(class="block text-sm font-medium leading-6 text-text-light dark:text-text-dark") }}
+                <div class="mt-2 flex items-center space-x-2">
+                    {{ form.url(class="block w-full rounded-md border-0 py-1.5 text-text-light dark:text-text-dark bg-surface-light dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6") }}
+                    <button onclick="refreshMetadata()" class="flex h-9 shrink-0 items-center justify-center rounded-md bg-success px-3 py-2 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90" type="button">
+                        <span class="material-symbols-outlined text-sm -ml-1 mr-1.5">sync</span>
+                        Refresh Metadata
+                    </button>
+                </div>
+                {% if form.url.errors %}
+                    <p class="mt-1 text-sm text-danger">{{ form.url.errors[0] }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                {{ form.speaker.label(class="block text-sm font-medium leading-6 text-text-light dark:text-text-dark") }}
+                <div class="mt-2">
+                    {{ form.speaker(class="block w-full rounded-md border-0 py-1.5 text-text-light dark:text-text-dark bg-surface-light dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6") }}
+                    {% if form.speaker.errors %}
+                        <p class="mt-1 text-sm text-danger">{{ form.speaker.errors[0] }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div>
+                {{ form.tags.label(class="block text-sm font-medium leading-6 text-text-light dark:text-text-dark") }}
+                <div class="mt-2">
+                    {{ form.tags(class="block w-full rounded-md border-0 py-1.5 text-text-light dark:text-text-dark bg-surface-light dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6") }}
+                    {% if form.tags.errors %}
+                        <p class="mt-1 text-sm text-danger">{{ form.tags.errors[0] }}</p>
+                    {% endif %}
+                </div>
+                <p class="mt-2 text-xs text-text-light/80 dark:text-text-dark/80">Comma-separated values.</p>
+            </div>
+            
+            <div>
+                {{ form.description.label(class="block text-sm font-medium leading-6 text-text-light dark:text-text-dark") }}
+                <div class="mt-2">
+                    {{ form.description(class="block w-full rounded-md border-0 py-1.5 text-text-light dark:text-text-dark bg-surface-light dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6", rows="4") }}
+                    {% if form.description.errors %}
+                        <p class="mt-1 text-sm text-danger">{{ form.description.errors[0] }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-end space-x-3 pt-4 border-t border-border-light dark:border-border-dark">
+                <a href="{{ url_for('dashboard') }}" class="rounded-md bg-surface-light dark:bg-surface-dark px-3.5 py-2.5 text-sm font-semibold text-text-light dark:text-text-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-surface-dark/60">Cancel</a>
+                {{ form.submit(class="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function refreshMetadata() {
+    const urlField = document.getElementById('url');
+    const url = urlField.value.trim();
+    
+    if (!url) {
+        alert('Please enter a URL first');
+        return;
+    }
+    
+    const button = event.target;
+    button.disabled = true;
+    button.innerHTML = '<span class="material-symbols-outlined text-sm -ml-1 mr-1.5">hourglass_empty</span>Loading...';
+    
+    fetch('/api/metadata/extract', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: url })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.metadata) {
+            if (data.metadata.title) {
+                document.getElementById('title').value = data.metadata.title;
+            }
+            if (data.metadata.description) {
+                document.getElementById('description').value = data.metadata.description;
+            }
+            alert('Metadata refreshed successfully!');
+        } else {
+            alert('Error: ' + (data.error || 'Failed to extract metadata'));
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    })
+    .finally(() => {
+        button.disabled = false;
+        button.innerHTML = '<span class="material-symbols-outlined text-sm -ml-1 mr-1.5">sync</span>Refresh Metadata';
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}{{ video.title }} - GenTube Admin{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl">
+    <!-- Video Player -->
+    <div class="aspect-video w-full overflow-hidden rounded-xl bg-surface-dark shadow-lg">
+        {% if 'youtube.com' in video.url or 'youtu.be' in video.url %}
+            {% if 'v=' in video.url %}
+                {% set video_id = video.url.split('v=')[1].split('&')[0] %}
+            {% elif 'youtu.be/' in video.url %}
+                {% set video_id = video.url.split('youtu.be/')[1].split('?')[0] %}
+            {% else %}
+                {% set video_id = video.url.split('/')[-1] %}
+            {% endif %}
+            <iframe class="h-full w-full" src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+        {% elif 'vimeo.com' in video.url %}
+            {% set video_id = video.url.split('/')[-1] %}
+            <iframe class="h-full w-full" src="https://player.vimeo.com/video/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+        {% elif 'x.com' in video.url or 'twitter.com' in video.url %}
+            <div class="flex h-full w-full items-center justify-center bg-black">
+                <div class="text-center">
+                    <span class="text-3xl font-bold text-white mb-4 block">𝕏</span>
+                    <p class="text-white mb-4">X/Twitter videos cannot be embedded</p>
+                    <a href="{{ video.url }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90">
+                        <span class="material-symbols-outlined text-sm mr-2">open_in_new</span>
+                        Watch on X
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="flex h-full w-full items-center justify-center bg-black">
+                <div class="text-center">
+                    <span class="text-3xl font-bold text-white mb-4 block">🎥</span>
+                    <p class="text-white mb-4">Unable to embed this video</p>
+                    <a href="{{ video.url }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90">
+                        <span class="material-symbols-outlined text-sm mr-2">open_in_new</span>
+                        Watch Original
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Video Title -->
+    <div class="mt-6">
+        <h1 class="text-3xl font-bold tracking-tight text-text-light dark:text-text-dark">{{ video.title }}</h1>
+    </div>
+    
+    <!-- Metadata Cards -->
+    <div class="mt-4 grid grid-cols-2 gap-4">
+        <div class="rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-4 shadow-sm">
+            <p class="text-sm font-medium text-text-light/80 dark:text-text-dark/80">Speaker</p>
+            <p class="mt-1 text-lg font-semibold">{{ video.speaker }}</p>
+        </div>
+        <div class="rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-4 shadow-sm">
+            <p class="text-sm font-medium text-text-light/80 dark:text-text-dark/80">Date Added</p>
+            <p class="mt-1 text-lg font-semibold">{{ video.date_added.strftime('%Y-%m-%d') }}</p>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="{{ video.url }}" target="_blank" class="flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90">
+            <span class="material-symbols-outlined text-sm -ml-1 mr-2">play_circle</span>
+            Watch Original
+        </a>
+        <a href="{{ url_for('edit_video', id=video.id) }}" class="flex items-center justify-center rounded-md bg-surface-light dark:bg-surface-dark px-4 py-2 text-sm font-semibold text-text-light dark:text-text-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-surface-dark/60">
+            <span class="material-symbols-outlined text-sm -ml-1 mr-2">edit</span>
+            Edit Video
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="flex items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10">
+            <span class="material-symbols-outlined text-sm -ml-1 mr-2">arrow_back</span>
+            Back to Dashboard
+        </a>
+    </div>
+    
+    <!-- Description -->
+    {% if video.description %}
+    <div class="mt-8 border-t border-border-light dark:border-border-dark pt-8">
+        <h2 class="text-lg font-semibold text-text-light dark:text-text-dark mb-4">Description</h2>
+        <div class="rounded-lg bg-surface-light dark:bg-surface-dark p-4 text-text-light dark:text-text-dark">
+            {{ video.description|safe }}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Tags -->
+    {% if video.tags %}
+    <div class="mt-6">
+        <h3 class="text-sm font-medium text-text-light/80 dark:text-text-dark/80 mb-2">Tags</h3>
+        <div class="flex flex-wrap gap-2">
+            {% for tag in video.tags.split(',') %}
+            <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{{ tag.strip() }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Technical Metadata -->
+    {% if video.video_metadata %}
+    <div class="mt-8 border-t border-border-light dark:border-border-dark pt-8">
+        <details class="w-full">
+            <summary class="flex cursor-pointer items-center justify-between font-semibold text-text-light dark:text-text-dark hover:text-primary dark:hover:text-primary">
+                <span class="text-lg">Technical Metadata</span>
+                <span class="material-symbols-outlined summary-icon transform transition-transform duration-200">chevron_right</span>
+            </summary>
+            <div class="mt-4">
+                <pre class="w-full overflow-x-auto rounded-lg bg-surface-dark p-4 text-sm font-mono text-text-dark shadow-inner"><code class="language-json">{{ video.video_metadata|tojson(indent=2) }}</code></pre>
+            </div>
+        </details>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+details > summary {
+    list-style: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+details[open] .summary-icon {
+    transform: rotate(90deg);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html :class="{ 'dark': isDarkMode }" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenTube - Video Archive</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" :content="isDarkMode ? '#101022' : '#1313ec'">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="GenTube">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo1.png">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1313ec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#2D3748] dark:text-[#F7FAFC]">
+    <div id="app" class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col w-full max-w-7xl flex-1">
+                    <!-- Header -->
+                    <header class="sticky top-5 z-10 flex flex-col gap-3 rounded-xl bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border border-black/10 dark:border-white/10 p-4">
+                        <div class="flex items-center justify-between whitespace-nowrap">
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2 text-slate-900 dark:text-white cursor-pointer" @click="goToHome">
+                                    <div class="size-6">
+                                        <img src="logo2.png" alt="GenTube Logo" class="h-6 w-6 block dark:hidden">
+                                        <img src="logo1.png" alt="GenTube Logo" class="h-6 w-6 hidden dark:block">
+                                    </div>
+                                    <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">GenTube</h2>
+                                </div>
+                                <nav class="hidden md:flex items-center gap-6">
+                                    <button @click="goToHome" :class="currentView === 'home' ? 'text-primary font-semibold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'" class="text-sm transition-colors">Home</button>
+                                    <button @click="goToArchive" :class="currentView === 'archive' ? 'text-primary font-semibold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'" class="text-sm transition-colors">Browse</button>
+                                </nav>
+                            </div>
+                            <div class="flex flex-1 justify-end items-center gap-4">
+                                <label v-if="currentView === 'archive'" class="hidden md:flex flex-col min-w-40 !h-10 max-w-64">
+                                    <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                                        <div class="text-slate-500 dark:text-[#9292c9] flex border border-r-0 border-slate-300 dark:border-[#232348] bg-white dark:bg-[#232348] items-center justify-center pl-3 rounded-l-lg">
+                                            <span class="material-symbols-outlined text-lg">search</span>
+                                        </div>
+                                        <input 
+                                            v-model="searchQuery" 
+                                            @input="handleSearch"
+                                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-l-0 border-slate-300 dark:border-[#232348] bg-white dark:bg-[#232348] h-full placeholder:text-slate-500 dark:placeholder:text-[#9292c9] px-4 rounded-l-none pl-2 text-sm font-normal leading-normal" 
+                                            placeholder="Search videos..."
+                                        >
+                                    </div>
+                                </label>
+                                <button @click="toggleDarkMode" class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-slate-200 dark:bg-[#232348] text-slate-900 dark:text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0">
+                                    <span class="material-symbols-outlined text-xl">dark_mode</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </header>
+                    
+                    <!-- Main Content -->
+                    <main class="mt-8">
+                        <!-- Home Page -->
+                        <div v-if="currentView === 'home'">
+                            <!-- Hero Section -->
+                            <div v-if="getFeaturedVideo()" class="relative mb-12 rounded-2xl overflow-hidden bg-gradient-to-r from-primary/20 to-primary/5">
+                                <div class="aspect-video md:aspect-[21/9] bg-center bg-cover" :style="getFeaturedVideo().thumbnail ? `background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('${getFeaturedVideo().thumbnail}')` : ''">
+                                    <div class="flex items-end h-full p-8 md:p-12">
+                                        <div class="max-w-2xl">
+                                            <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">{{ getFeaturedVideo().title }}</h1>
+                                            <p class="text-lg text-white/90 mb-6 line-clamp-3">{{ getFeaturedVideo().description }}</p>
+                                            <div class="flex gap-4">
+                                                <button @click="watchVideo(getFeaturedVideo())" class="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-white/90 transition-colors">
+                                                    <span class="material-symbols-outlined">play_arrow</span>
+                                                    Play
+                                                </button>
+                                                <button @click="goToArchive" class="flex items-center gap-2 bg-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors">
+                                                    <span class="material-symbols-outlined">info</span>
+                                                    Browse All
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recent Videos -->
+                            <div class="mb-8">
+                                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Recently Added</h2>
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                                    <div v-for="video in getRecentVideos()" :key="video.id" class="group cursor-pointer" @click="watchVideo(video)">
+                                        <div class="aspect-video bg-slate-200 dark:bg-[#232348] rounded-lg overflow-hidden mb-2 transform group-hover:scale-105 transition-transform duration-300" :style="video.thumbnail ? `background-image: url('${video.thumbnail}')` : ''">
+                                            <div v-if="!video.thumbnail" class="w-full h-full flex items-center justify-center text-2xl text-slate-400">
+                                                <span v-if="video.url.includes('x.com') || video.url.includes('twitter.com')">𝕏</span>
+                                                <span v-else>🎥</span>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-sm font-semibold text-slate-900 dark:text-white line-clamp-2">{{ video.title }}</h3>
+                                        <p class="text-xs text-slate-600 dark:text-slate-400">{{ video.speaker }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Archive Page -->
+                        <div v-if="currentView === 'archive'">
+                            <!-- Filters (Mobile) -->
+                            <div class="flex flex-col md:hidden gap-3 mb-6">
+                                <label class="flex flex-col w-full !h-10">
+                                    <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                                        <div class="text-slate-500 dark:text-[#9292c9] flex border border-r-0 border-slate-300 dark:border-[#232348] bg-white dark:bg-[#232348] items-center justify-center pl-3 rounded-l-lg">
+                                            <span class="material-symbols-outlined text-lg">search</span>
+                                        </div>
+                                        <input 
+                                            v-model="searchQuery" 
+                                            @input="handleSearch"
+                                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-l-0 border-slate-300 dark:border-[#232348] bg-white dark:bg-[#232348] h-full placeholder:text-slate-500 dark:placeholder:text-[#9292c9] px-4 rounded-l-none pl-2 text-sm font-normal leading-normal" 
+                                            placeholder="Search videos..."
+                                        >
+                                    </div>
+                                </label>
+                                <div class="flex gap-3">
+                                    <select v-model="selectedSpeaker" @change="handleFilter" class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-[#232348] px-4 w-full appearance-none pr-8">
+                                        <option value="">All Speakers</option>
+                                        <option v-for="speaker in speakers" :key="speaker" :value="speaker">{{ speaker }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Stats -->
+                            <div class="mb-6 text-sm text-slate-600 dark:text-[#A0AEC0]">
+                                <span>{{ filteredVideos.length }} videos</span>
+                                <span v-if="searchQuery"> for "{{ searchQuery }}"</span>
+                                <span v-if="selectedSpeaker"> by {{ selectedSpeaker }}</span>
+                            </div>
+                            
+                            <!-- Video Grid -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" ref="videoGrid">
+                                <div 
+                                    v-for="video in displayedVideos" 
+                                    :key="video.id" 
+                                    class="flex flex-col gap-3 group cursor-pointer"
+                                    @click="watchVideo(video)"
+                                >
+                                    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg overflow-hidden transform group-hover:scale-105 transition-transform duration-300 bg-slate-200 dark:bg-[#232348]" 
+                                         :style="video.thumbnail ? `background-image: url('${video.thumbnail}')` : ''">
+                                        <div v-if="!video.thumbnail" class="w-full h-full flex items-center justify-center text-4xl text-slate-400">
+                                            <span v-if="video.url.includes('x.com') || video.url.includes('twitter.com')">𝕏</span>
+                                            <span v-else>🎥</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-900 dark:text-white text-base font-bold leading-normal">{{ video.title }}</p>
+                                        <p class="text-slate-600 dark:text-[#A0AEC0] text-sm font-normal leading-normal">{{ video.speaker }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Loading Indicator -->
+                            <div v-if="loading" class="flex flex-col gap-3 p-4 mt-12">
+                                <div class="flex gap-6 justify-center">
+                                    <p class="text-slate-600 dark:text-[#A0AEC0] text-sm font-medium leading-normal">Loading videos...</p>
+                                </div>
+                                <div class="w-full rounded-full bg-slate-200 dark:bg-[#323267]">
+                                    <div class="h-2 rounded-full bg-primary" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- No Results -->
+                            <div v-if="!loading && filteredVideos.length === 0" class="text-center py-16">
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">No videos found</h3>
+                                <p class="text-slate-600 dark:text-[#A0AEC0]">
+                                    <span v-if="searchQuery || selectedSpeaker">Try adjusting your search criteria</span>
+                                    <span v-else>No videos available</span>
+                                </p>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Video Player Modal -->
+        <div v-if="showVideoPlayer" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" @click="closeVideoPlayer">
+            <div class="bg-white dark:bg-[#232348] rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden" @click.stop>
+                <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ currentVideo?.title }}</h3>
+                    <button @click="closeVideoPlayer" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div class="aspect-video">
+                    <iframe 
+                        v-if="currentVideo && getEmbedUrl(currentVideo.url)"
+                        :src="getEmbedUrl(currentVideo.url)"
+                        frameborder="0"
+                        allowfullscreen
+                        allow="autoplay; encrypted-media"
+                        class="w-full h-full"
+                    ></iframe>
+                    <div v-else class="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+                        <div class="text-center">
+                            <div v-if="currentVideo?.url.includes('x.com') || currentVideo?.url.includes('twitter.com')" class="text-center">
+                                <span class="text-6xl mb-4 block">𝕏</span>
+                                <p class="text-slate-600 dark:text-slate-400 mb-4">X/Twitter videos cannot be embedded</p>
+                                <a :href="currentVideo?.url" target="_blank" rel="noopener" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90">
+                                    <span class="material-symbols-outlined text-sm mr-2">open_in_new</span>
+                                    Watch on X
+                                </a>
+                            </div>
+                            <div v-else>
+                                <p class="text-slate-600 dark:text-slate-400 mb-4">Unable to embed this video</p>
+                                <a :href="currentVideo?.url" target="_blank" rel="noopener" class="text-primary hover:underline">
+                                    Watch on {{ currentVideo?.platform || 'original site' }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex items-center gap-4 text-sm text-slate-600 dark:text-[#A0AEC0] mb-2">
+                        <span class="font-medium text-primary">{{ currentVideo?.speaker }}</span>
+                        <span v-if="currentVideo?.platform">{{ currentVideo.platform }}</span>
+                        <span>{{ formatDate(currentVideo?.date_added) }}</span>
+                    </div>
+                    <p v-if="currentVideo?.description" class="text-slate-700 dark:text-slate-300 text-sm">
+                        {{ currentVideo.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(error => console.log('SW registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>

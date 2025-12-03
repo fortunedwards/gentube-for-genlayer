@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Bulk Import Videos - GenTube Admin{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold tracking-tight text-text-light dark:text-text-dark">Bulk Import Videos</h1>
+        <p class="mt-2 text-base text-text-light/80 dark:text-text-dark/80">Upload a JSON file to import multiple videos at once.</p>
+    </div>
+    
+    <div class="rounded-lg border border-info/30 bg-info/10 p-6 dark:bg-info/20">
+        <div class="flex items-start gap-4">
+            <span class="material-symbols-outlined mt-1 text-info">info</span>
+            <div>
+                <h3 class="text-lg font-semibold text-text-light dark:text-text-dark">JSON File Structure</h3>
+                <p class="mt-1 text-sm text-text-light/80 dark:text-text-dark/80">
+                    Your JSON file should contain an array of video objects. Each object must include a <code class="font-mono text-sm">url</code> and a <code class="font-mono text-sm">title</code>.
+                </p>
+                <div class="mt-4">
+                    <pre class="w-full overflow-x-auto rounded-md bg-surface-dark p-4 text-sm font-mono text-text-dark shadow-inner"><code class="language-json">[
+  {
+    "title": "Introduction to Quantum Computing",
+    "url": "https://youtube.com/watch?v=abcdef123",
+    "speaker": "Dr. Evelyn Reed",
+    "tags": "Quantum, Computing, Physics",
+    "description": "A comprehensive overview..."
+  },
+  {
+    "title": "Advanced AI Concepts",
+    "url": "https://vimeo.com/123456789",
+    "speaker": "Prof. Sarah Chen"
+  }
+]</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 border-t border-border-light dark:border-border-dark pt-8">
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="space-y-6">
+                <div>
+                    {{ form.file.label(class="block text-sm font-medium leading-6 text-text-light dark:text-text-dark") }}
+                    <div class="mt-2">
+                        {{ form.file(class="block w-full rounded-md border-0 py-1.5 text-text-light dark:text-text-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark placeholder:text-text-light/50 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-surface-dark file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary dark:file:bg-primary/20 dark:file:text-white hover:file:bg-primary/20 dark:hover:file:bg-primary/30", accept=".json") }}
+                        {% if form.file.errors %}
+                            <p class="mt-1 text-sm text-danger">{{ form.file.errors[0] }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    {{ form.submit(class="flex items-center justify-center rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary") }}
+                    <a href="{{ url_for('dashboard') }}" class="rounded-md bg-surface-light dark:bg-surface-dark px-3.5 py-2.5 text-sm font-semibold text-text-light dark:text-text-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-border-dark hover:bg-gray-50 dark:hover:bg-surface-dark/60">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="mt-8 border-t border-border-light dark:border-border-dark pt-8">
+        <h3 class="text-lg font-semibold text-text-light dark:text-text-dark mb-4">Sample Data</h3>
+        <p class="text-sm text-text-light/80 dark:text-text-dark/80">
+            You can also <a href="{{ url_for('export_json') }}" class="text-primary hover:underline">download current data</a> as a template.
+        </p>
+    </div>
+</div>
+
+<script>
+// Add upload icon to submit button
+document.addEventListener('DOMContentLoaded', function() {
+    const submitBtn = document.querySelector('input[type="submit"]');
+    if (submitBtn) {
+        submitBtn.value = '📤 ' + submitBtn.value;
+    }
+});
+</script>
+{% endblock %}
