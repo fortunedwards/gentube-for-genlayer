@@ -1,21 +1,6 @@
 {
-  "functions": {
-    "api/app.py": {
-      "runtime": "@vercel/python"
-    }
-  },
-  "routes": [
-    {
-      "src": "/admin/(.*)",
-      "dest": "/api/app.py"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/app.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public_archive/$1"
-    }
-  ]
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": "public_archive",
+  "cleanUrls": true,
+  "trailingSlash": false
 }
