@@ -35,7 +35,6 @@ pip install -r requirements.txt
 python run.py
 ```
 - Access: http://localhost:5000
-- Login: `admin` / `admin123`
 
 ### Public Archive
 ```bash
@@ -122,4 +121,4 @@ This system is specifically designed for GenLayer's video content needs:
 
 ---
 
-**Built for GenLayer** | Modern Video Archive System
+**Built by Fortune Edwards for the GenLayer Community** | Modern Video Archive System
