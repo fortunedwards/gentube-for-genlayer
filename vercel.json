@@ -1,0 +1,21 @@
+{
+  "functions": {
+    "api/app.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "routes": [
+    {
+      "src": "/admin/(.*)",
+      "dest": "/api/app.py"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/app.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public_archive/$1"
+    }
+  ]
+}
