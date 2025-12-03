@@ -1,119 +1,125 @@
-# Hybrid Interactive Video Archive
+# GenTube - Video Archive System for GenLayer
 
-A two-part system combining a secure Flask admin dashboard with a fast static public archive.
+🎥 A modern video archive system with Netflix-style PWA frontend and secure Flask admin dashboard, specifically designed for GenLayer content.
 
-## Architecture
+## ✨ Features
 
-- **Part A**: Admin Dashboard (Flask) - Secure backend for managing videos
-- **Part B**: Public Archive (Static) - Fast frontend for browsing videos
+### 🏠 Netflix-Style Home Page
+- **Hero Section**: Featured YouTube videos with random rotation
+- **Recently Added**: Grid of latest videos
+- **Responsive Design**: Mobile-first approach
+- **Dark/Light Mode**: System preference detection
 
-## Setup Instructions
+### 🎯 Admin Dashboard
+- **Modern UI**: Tailwind CSS with dark mode support
+- **Video Management**: Add, edit, delete videos with metadata
+- **Platform Support**: YouTube, Vimeo, Twitter/X detection
+- **Bulk Import**: JSON file upload for multiple videos
+- **Database Backups**: Automated backup system
+- **Export System**: Generate videos.json for public archive
 
-### 1. Admin Dashboard Setup
+### 📱 Progressive Web App (PWA)
+- **Vue.js 3**: Reactive frontend with smooth animations
+- **Offline Support**: Service worker caching
+- **Install Prompts**: Add to home screen capability
+- **Video Player**: Embedded YouTube/Vimeo with fallbacks
+- **Search & Filter**: Real-time video filtering
+- **Infinite Scroll**: Lazy loading for performance
 
-**Option A: Command Line**
+## 🚀 Quick Start
+
+### Admin Dashboard
 ```bash
 cd admin_dashboard
 pip install -r requirements.txt
 python run.py
 ```
+- Access: http://localhost:5000
+- Login: `admin` / `admin123`
 
-**Option B: Windows (Double-click)**
-```
-start_admin.bat
-```
-
-- Access at: http://localhost:5000
-- Default login: `admin` / `admin123`
-- Database and admin user created automatically
-
-### 2. Public Archive Setup
-
-**Option A: Command Line**
+### Public Archive
 ```bash
 cd public_archive
 python -m http.server 8000
 ```
+- Access: http://localhost:8000
 
-**Option B: Windows (Double-click)**
-```
-start_public.bat
-```
+### Windows Quick Start
+- Double-click `start_admin.bat` for admin dashboard
+- Double-click `start_public.bat` for public archive
 
-**Option C: Other servers**
-```bash
-npx serve .          # Node.js
-php -S localhost:8000  # PHP
-```
-
-- Access at: http://localhost:8000
-- Modern PWA with offline support, dark mode, and mobile-first design
-
-## Usage Workflow
-
-1. **Admin adds videos**: Log into Flask dashboard, add/edit videos
-2. **Export data**: Click "Export Data" to generate `videos.json`
-3. **Deploy**: Upload public_archive folder to static hosting
-4. **Users browse**: Fast, searchable video archive
-
-## Features
-
-### Admin Dashboard
-- Secure login system
-- Add/edit/delete videos
-- Export to JSON
-- Video management interface
-
-### Public Archive (Modern PWA)
-- **Vue.js 3** reactive frontend
-- **Progressive Web App** with offline support
-- **Dark/Light mode** with system preference detection
-- **Responsive design** mobile-first approach
-- **YouTube/Vimeo embed** support with modal player
-- **Infinite scroll** with lazy loading
-- **Service Worker** caching for offline use
-- **Install prompts** for mobile and desktop
-
-## File Structure
+## 🏗️ Architecture
 
 ```
 GenTube/
-├── admin_dashboard/          # Flask backend
-│   ├── run.py               # Simple startup script
-│   ├── app.py               # Main Flask app
-│   ├── backup.py            # Database backup system
-│   ├── bulk_operations.py   # Import/export operations
-│   ├── forms.py             # WTForms validation
-│   ├── video_metadata.py    # Video metadata extraction
-│   ├── webhooks.py          # Auto-export webhooks
-│   ├── templates/           # HTML templates
-│   ├── requirements.txt     # Python dependencies
-│   └── instance/videos.db   # SQLite database (auto-created)
-├── public_archive/          # Modern PWA frontend
-│   ├── index.html          # Vue.js application
-│   ├── css/app.css         # Modern CSS with dark mode
-│   ├── js/app.js           # Vue.js logic with PWA features
-│   ├── manifest.json       # PWA manifest
-│   ├── sw.js              # Service worker
-│   └── videos.json        # Exported video data
-├── start_admin.bat          # Windows: Start admin dashboard
-├── start_public.bat         # Windows: Start public archive
+├── admin_dashboard/         # Flask Backend
+│   ├── templates/          # Modern Jinja2 templates
+│   ├── static/            # Logo assets
+│   ├── app.py             # Main Flask application
+│   ├── forms.py           # WTForms validation
+│   ├── backup.py          # Database backup system
+│   └── requirements.txt   # Python dependencies
+├── public_archive/         # Vue.js PWA Frontend
+│   ├── index.html         # Netflix-style home page
+│   ├── js/app.js          # Vue.js application logic
+│   ├── manifest.json      # PWA configuration
+│   ├── sw.js             # Service worker
+│   └── videos.json       # Video data export
 └── README.md
 ```
 
-## Deployment
+## 🎨 Design System
+
+- **Colors**: Custom GenLayer brand colors with primary blue (#2A4D8E)
+- **Typography**: Inter font family for modern look
+- **Icons**: Material Symbols for consistency
+- **Logos**: Conditional light/dark mode logos (logo1.png/logo2.png)
+- **Responsive**: Mobile-first Tailwind CSS framework
+
+## 🔧 Platform Support
+
+| Platform | Embed Support | Preview | Notes |
+|----------|---------------|---------|-------|
+| YouTube | ✅ Full | ✅ Thumbnails | Featured in hero section |
+| Vimeo | ✅ Full | ✅ Basic | Full embed support |
+| Twitter/X | ❌ Link Only | 🅧 X Logo | Platform restrictions |
+| Others | ❌ Link Only | 🎥 Generic | External links |
+
+## 📊 Workflow
+
+1. **Content Management**: Add videos via admin dashboard
+2. **Auto-Export**: System generates videos.json automatically
+3. **PWA Access**: Users browse via Netflix-style interface
+4. **Deployment**: Static files deployable anywhere
+
+## 🚀 Deployment
 
 ### Admin Dashboard
-- Deploy Flask app to Heroku, AWS, or any Python hosting
-- Keep private/secure
+- **Heroku**: `git push heroku main`
+- **AWS/DigitalOcean**: Python hosting
+- **Keep Private**: Secure admin access only
 
 ### Public Archive
-- Deploy to GitHub Pages, Netlify, or AWS S3
-- Just upload the `public_archive` folder contents
+- **GitHub Pages**: Upload `public_archive/` contents
+- **Netlify**: Drag & drop deployment
+- **AWS S3**: Static website hosting
+- **Vercel**: Connect GitHub repository
 
-## Security Notes
+## 🔒 Security
 
-- Change the Flask SECRET_KEY in production
-- Change default admin credentials
-- Keep admin dashboard private
-- Only the public archive should be publicly accessible
+- Change default admin credentials in production
+- Update Flask SECRET_KEY for sessions
+- Keep admin dashboard private/secured
+- Public archive is safe for static hosting
+
+## 🌟 GenLayer Integration
+
+This system is specifically designed for GenLayer's video content needs:
+- Curated GenLayer educational content
+- Speaker-focused organization
+- Platform-agnostic video management
+- Modern, professional presentation
+
+---
+
+**Built for GenLayer** | Modern Video Archive System
