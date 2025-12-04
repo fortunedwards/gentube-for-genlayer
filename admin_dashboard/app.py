@@ -209,11 +209,14 @@ def export_data():
     json_data = BulkOperations.export_to_json(Video)
     video_data = json.loads(json_data)
     
-    # For separate deployments, return the JSON for manual update
-    # or implement webhook to update public site
+    # Write to a temporary file for download
+    import tempfile
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        f.write(json_data)
+        temp_path = f.name
     
     flash(f'Data exported successfully! {len(video_data)} videos exported.')
-    flash('Copy the exported JSON and update your public site videos.json file.')
+    flash('Use the API endpoint /api/videos to get JSON data for your public site.')
     return redirect(url_for('dashboard'))
 
 @app.route('/api/videos')
