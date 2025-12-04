@@ -17,4 +17,13 @@
     "date_added": "2025-12-02T03:34:36.688308",
     "description": "Have you ever wondered how AI will improve trust and decision-making in our everyday lives? Watch Albert Castellana talk about how GenLayer and RallyOnChain is changing the way we run businesses!"
   }
+  {
+    "id": 3,
+    "title": "GenLayer: First Intelligent Blockchain | Ft. Albert Castellana | Buildify Podcast",
+    "url": "https://www.youtube.com/watch?v=yrIGAsDuFBU",
+    "speaker": "Albert Castellana",
+    "tags": [],
+    "date_added": "2025-12-03T03:34:36.688308",
+    "description": "GenLayer is a decentralized blockchain platform designed to execute AI-powered smart contracts called Intelligent Contracts which can use AI models to search the web and process natural language instructions. GenLayer’s AI-powered smart contracts can use Large Language Models (LLMs) and access the Internet to make complex decisions in a decentralized manner."
+  }
 ]
