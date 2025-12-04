@@ -209,13 +209,22 @@ def export_data():
     json_data = BulkOperations.export_to_json(Video)
     video_data = json.loads(json_data)
     
-    # Export to public archive directory
-    public_path = os.path.join('..', 'public_archive', 'videos.json')
-    with open(public_path, 'w') as f:
-        f.write(json_data)
+    # For separate deployments, return the JSON for manual update
+    # or implement webhook to update public site
     
     flash(f'Data exported successfully! {len(video_data)} videos exported.')
+    flash('Copy the exported JSON and update your public site videos.json file.')
     return redirect(url_for('dashboard'))
+
+@app.route('/api/videos')
+@login_required_jwt
+def api_videos():
+    """API endpoint to get videos JSON for public site"""
+    json_data = BulkOperations.export_to_json(Video)
+    response = make_response(json_data)
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
 
 @app.route('/export_json')
 @login_required_jwt
