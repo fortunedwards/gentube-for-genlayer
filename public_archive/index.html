@@ -64,13 +64,13 @@
                     <!-- Header -->
                     <header class="sticky top-5 z-10 flex flex-col gap-3 rounded-xl bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border border-black/10 dark:border-white/10 p-4">
                         <div class="flex items-center justify-between whitespace-nowrap">
-                            <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2 md:gap-4">
                                 <div class="flex items-center gap-2 text-slate-900 dark:text-white cursor-pointer" @click="goToHome">
                                     <div class="size-6">
                                         <img src="logo2.png" alt="GenTube Logo" class="h-6 w-6 block dark:hidden">
                                         <img src="logo1.png" alt="GenTube Logo" class="h-6 w-6 hidden dark:block">
                                     </div>
-                                    <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">GenTube</h2>
+                                    <h2 class="text-slate-900 dark:text-white text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">GenTube</h2>
                                 </div>
                                 <nav class="hidden md:flex items-center gap-6">
                                     <button @click="goToHome" :class="currentView === 'home' ? 'text-primary font-semibold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'" class="text-sm transition-colors">Home</button>
@@ -224,9 +224,9 @@
         <!-- Video Player Modal -->
         <div v-if="showVideoPlayer" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-2 sm:p-4" @click="closeVideoPlayer">
             <div class="bg-white dark:bg-[#232348] rounded-lg sm:rounded-xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden" @click.stop>
-                <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ currentVideo?.title }}</h3>
-                    <button @click="closeVideoPlayer" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                <div class="flex items-center justify-between p-3 sm:p-4 border-b border-slate-200 dark:border-slate-700">
+                    <h3 class="text-sm sm:text-lg font-bold text-slate-900 dark:text-white pr-2 line-clamp-2">{{ currentVideo?.title }}</h3>
+                    <button @click="closeVideoPlayer" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 shrink-0">
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
@@ -258,13 +258,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-4">
-                    <div class="flex items-center gap-4 text-sm text-slate-600 dark:text-[#A0AEC0] mb-2">
+                <div class="p-3 sm:p-4">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-600 dark:text-[#A0AEC0] mb-2">
                         <span class="font-medium text-primary">{{ currentVideo?.speaker }}</span>
                         <span v-if="currentVideo?.platform">{{ currentVideo.platform }}</span>
-                        <span>{{ formatDate(currentVideo?.date_added) }}</span>
+                        <span class="hidden sm:inline">{{ formatDate(currentVideo?.date_added) }}</span>
                     </div>
-                    <p v-if="currentVideo?.description" class="text-slate-700 dark:text-slate-300 text-sm">
+                    <p v-if="currentVideo?.description" class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm">
                         {{ currentVideo.description }}
                     </p>
                 </div>
