@@ -111,7 +111,7 @@ createApp({
             // Generate thumbnail from URL for known platforms
             if (video.url.includes('youtube.com') || video.url.includes('youtu.be')) {
                 const videoId = this.extractYouTubeId(video.url);
-                return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
+                return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
             }
             
             if (video.url.includes('vimeo.com')) {
