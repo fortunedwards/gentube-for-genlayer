@@ -1,30 +1,45 @@
-import sys
-import os
-from pathlib import Path
+from flask import Flask
 
-# Add admin_dashboard to Python path
-current_dir = Path(__file__).parent
-admin_dir = current_dir.parent / 'admin_dashboard'
-sys.path.insert(0, str(admin_dir))
+app = Flask(__name__)
 
-# Set working directory to admin_dashboard
-os.chdir(str(admin_dir))
+@app.route('/')
+@app.route('/admin')
+@app.route('/admin/')
+def admin_redirect():
+    return '''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>GenTube Admin</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-900 text-white">
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="max-w-md w-full space-y-8 text-center">
+                <div>
+                    <h2 class="text-3xl font-bold">GenTube Admin</h2>
+                    <p class="mt-2 text-gray-400">Video Management Dashboard</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <p class="text-blue-400 mb-4">🚀 Admin Dashboard Available</p>
+                    <a href="https://gentube-admin.vercel.app" 
+                       class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Access Admin Dashboard
+                    </a>
+                    <p class="text-sm text-gray-400 mt-4">
+                        Deploy the admin_dashboard folder as a separate Vercel project
+                    </p>
+                </div>
+                <div class="text-center">
+                    <a href="/" class="text-blue-400 hover:text-blue-300">← Back to Public Archive</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    '''
 
-# Import the complete Flask app
-from app import app, db, create_admin_user
-
-# Initialize database and admin user for serverless
-try:
-    with app.app_context():
-        db.create_all()
-        create_admin_user()
-except Exception as e:
-    print(f"Database initialization error: {e}")
-
-# Vercel handler
-def handler(event, context):
+def handler(request, context):
     return app
-
-# For local testing
-if __name__ == "__main__":
-    app.run(debug=True)
