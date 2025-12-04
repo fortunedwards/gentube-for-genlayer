@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/admin.py": {
-      "runtime": "python3.9"
+      "runtime": "python3.9@3.9.16"
     }
   },
   "rewrites": [
