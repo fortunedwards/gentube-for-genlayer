@@ -59,8 +59,8 @@
                     </div>
                     <h2 class="text-lg font-bold tracking-tight">GenTube Admin</h2>
                 </div>
-                <div class="flex items-center gap-6">
-                    <nav class="flex items-center gap-6 text-sm font-medium">
+                <div class="flex items-center gap-2 md:gap-6">
+                    <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
                         {% if is_authenticated %}
                             <a class="{% if request.endpoint == 'dashboard' %}relative text-primary py-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary{% else %}py-1 text-text-light/80 dark:text-text-dark/80 hover:text-primary dark:hover:text-primary transition-colors{% endif %}" href="{{ url_for('dashboard') }}">Dashboard</a>
                             <a class="{% if request.endpoint == 'add_video' %}relative text-primary py-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary{% else %}py-1 text-text-light/80 dark:text-text-dark/80 hover:text-primary dark:hover:text-primary transition-colors{% endif %}" href="{{ url_for('add_video') }}">Add Video</a>
@@ -68,7 +68,7 @@
                         {% endif %}
                     </nav>
                     {% if is_authenticated %}
-                        <a href="{{ url_for('logout') }}" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-danger text-white text-sm font-bold transition-opacity hover:opacity-90">
+                        <a href="{{ url_for('logout') }}" class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 md:h-10 px-2 md:px-4 bg-danger text-white text-xs md:text-sm font-bold transition-opacity hover:opacity-90">
                             <span class="truncate">Logout</span>
                         </a>
                     {% endif %}
