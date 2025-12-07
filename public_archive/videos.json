@@ -27,7 +27,7 @@
     "description": "GenLayer is a decentralized blockchain platform designed to execute AI-powered smart contracts called Intelligent Contracts which can use AI models to search the web and process natural language instructions. GenLayer’s AI-powered smart contracts can use Large Language Models (LLMs) and access the Internet to make complex decisions in a decentralized manner."
   },
   {
-  "id": 4,
+    "id": 4,
     "title": "GenLayer Deep Dive🔋 by Wire Network & VDEX",
     "url": "https://x.com/i/spaces/1PlJQOApWMzKE",
     "speaker": "Iván Raskovsky",
@@ -36,16 +36,16 @@
     "description": "GenLayer: Trustless Decision Making Protocol"
   },
   {
-  "id": 5,
+    "id": 5,
     "title": "GenLayer Future",
     "url": "https://x.com/i/spaces/1YqJDNAXmnDKV",
-    "speaker": "Iván Raskovsky", "David Ruidor",
+    "speakers": ["Iván Raskovsky", "David Ruidor"],
     "tags": [],
     "date_added": "2025-12-04T04:34:36.688308",
     "description": ""
   },
   {
-  "id": 6,
+    "id": 6,
     "title": "Ashram Hours with Albert Castellana Co-Founder & CEO GenLayer",
     "url": "https://x.com/i/broadcasts/1MYxNlBmnlXGw",
     "speaker": "Albert Castellana",

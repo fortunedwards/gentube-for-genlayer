@@ -147,7 +147,12 @@ createApp({
         
         processVideos() {
             // Extract unique speakers, platforms, and tags
-            this.speakers = [...new Set(this.videos.map(v => v.speaker))].sort();
+            const allSpeakers = this.videos.flatMap(v => {
+                if (Array.isArray(v.speakers)) return v.speakers;
+                if (v.speaker) return [v.speaker];
+                return [];
+            });
+            this.speakers = [...new Set(allSpeakers)].sort();
             this.platforms = [...new Set(this.videos.map(v => v.platform))].filter(Boolean).sort();
             this.tags = [...new Set(this.videos.flatMap(v => v.tags || []))].filter(Boolean).sort();
             
@@ -161,17 +166,26 @@ createApp({
             // Search filter
             if (this.searchQuery) {
                 const query = this.searchQuery.toLowerCase();
-                filtered = filtered.filter(video => 
-                    video.title.toLowerCase().includes(query) ||
-                    video.description.toLowerCase().includes(query) ||
-                    video.speaker.toLowerCase().includes(query) ||
-                    (video.tags && video.tags.some(tag => tag.toLowerCase().includes(query)))
-                );
+                filtered = filtered.filter(video => {
+                    const speakerMatch = Array.isArray(video.speakers) 
+                        ? video.speakers.some(s => s.toLowerCase().includes(query))
+                        : video.speaker?.toLowerCase().includes(query);
+                    
+                    return video.title.toLowerCase().includes(query) ||
+                        video.description.toLowerCase().includes(query) ||
+                        speakerMatch ||
+                        (video.tags && video.tags.some(tag => tag.toLowerCase().includes(query)));
+                });
             }
             
             // Speaker filter
             if (this.selectedSpeaker) {
-                filtered = filtered.filter(video => video.speaker === this.selectedSpeaker);
+                filtered = filtered.filter(video => {
+                    if (Array.isArray(video.speakers)) {
+                        return video.speakers.includes(this.selectedSpeaker);
+                    }
+                    return video.speaker === this.selectedSpeaker;
+                });
             }
             
             // Platform filter
