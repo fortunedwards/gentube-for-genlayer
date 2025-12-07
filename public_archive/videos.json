@@ -47,10 +47,19 @@
   {
     "id": 6,
     "title": "Ashram Hours with Albert Castellana Co-Founder & CEO GenLayer",
-    "url": "https://x.com/i/broadcasts/1MYxNlBmnlXGw",
+    "url": "https://www.youtube.com/watch?v=QddEu_CM2D4",
     "speaker": "Albert Castellana",
     "tags": [],
     "date_added": "2025-12-04T05:34:36.688308",
     "description": "Great to see our founder catching up with Nirvana_Fi, talking about collaboration, GenLayer, Rally, and the future of AI-powered blockchains"
+  },
+  {
+    "id": 7,
+    "title": "Introducing GenLayer's Incentivized Points Program",
+    "url": "https://www.youtube.com/live/RYpdVfRFUR4?si=dDA-mIdK8gZOhV-S",
+    "speaker": ["Iván Raskovsky", "Igor Validatrium", "Ioachim Viju", "Cryptony"],
+    "tags": [],
+    "date_added": "2025-12-04T06:34:36.688308",
+    "description": "We’re excited to launch the Incentivized Builders Program. Refer developers and earn points while helping grow the GenLayer ecosystem. Top referrers will also enter a $1,000 raffle. Anyone can earn Builder Points by referring developers."
   }
 ]
