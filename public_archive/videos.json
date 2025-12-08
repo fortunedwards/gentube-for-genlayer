@@ -61,5 +61,59 @@
     "tags": [],
     "date_added": "2025-12-04T06:34:36.688308",
     "description": "We’re excited to launch the Incentivized Builders Program. Refer developers and earn points while helping grow the GenLayer ecosystem. Top referrers will also enter a $1,000 raffle. Anyone can earn Builder Points by referring developers."
+  },
+  {
+    "id": 8,
+    "title": "Introducing GenLayer's Intelligent Oracle",
+    "url": "https://www.youtube.com/watch?v=ssQkQXybX4Y",
+    "speaker": "Cristiam Da Silva",
+    "tags": [],
+    "date_added": "2025-12-07T21:52:08.000000",
+    "description": "Introducing GenLayer's Intelligent Oracle - a decentralized oracle service that leverages AI to provide accurate, real-time data to smart contracts on the GenLayer blockchain."
+  },
+  {
+    "id": 9,
+    "title": "Build a Football Prediction Market Using the Studio",
+    "url": "https://www.youtube.com/watch?v=9mkkg-n1NSI",
+    "speaker": "Cristiam Da Silva",
+    "tags": [],
+    "date_added": "2025-12-07T21:52:08.000000",
+    "description": "Cristiam shows how to build the first Prediction Market using the Studio."
+  },
+  {
+    "id": 10,
+    "title": "Coding the First Intelligent Contract with GenLayer Studio #2",
+    "url": "https://www.youtube.com/watch?v=5AgUm_AithY",
+    "speaker": "Cristiam Da Silva",
+    "tags": [],
+    "date_added": "2025-12-07T21:52:08.000000",
+    "description": "Cristiam shows how to get started coding Intelligent Contracts."
+  },
+  {
+    "id": 11,
+    "title": "Coding the First Intelligent Contract with GenLayer Studio #1",
+    "url": "https://www.youtube.com/watch?v=0ESY5eVrVco",
+    "speaker": "Cristiam Da Silva",
+    "tags": [],
+    "date_added": "2025-12-07T21:52:08.000000",
+    "description": "Cristiam shows how to get started coding Intelligent Contracts."
+  },
+  {
+    "id": 12,
+    "title": "Explore the GenLayer Studio",
+    "url": "https://www.youtube.com/watch?v=aY6IzL1maZ0",
+    "speaker": "Cristiam Da Silva",
+    "tags": [],
+    "date_added": "2025-12-07T21:52:08.000000",
+    "description": "Cristiam shows how to use the GenLayer Studio."
+  },
+  {
+    "id": 13,
+    "title": "Showcasing the GenLayer Simulator",
+    "url": "https://www.youtube.com/watch?v=G4N-oErlIBI",
+    "speaker": "Edgars Nemše",
+    "tags": [],
+    "date_added": "2025-12-07T21:52:08.000000",
+    "description": "In this video, Edgars is going to showcase the GenLayer Simulator and how any developer can build Intelligent Contracts with our Python based programming language GenPy."
   }
 ]
